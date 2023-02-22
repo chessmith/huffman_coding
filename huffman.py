@@ -3,8 +3,8 @@ from collections import Counter, deque
 from pathlib import Path
 from node import Node
 
-
 Pathlike = str | Path
+
 
 # Count the frequency of each character in a given file.
 def _count_chars(filename: str):
@@ -139,8 +139,8 @@ def _rebuild_tree(traversal: bytes):
 # Write the compressed text and Huffman tree to a binary file.
 def _write_compressed(filename: Pathlike, traversal: bytes, compressed: bytes):
     with open(filename, 'wb') as f:
-        # Write the length of the Huffman tree and compressed text as 4-byte big-endian integers
-        f.write(len(traversal).to_bytes(4, 'big'))
+        # Write the length of the Huffman tree and compressed text as big-endian integers
+        f.write(len(traversal).to_bytes(2, 'big'))
         f.write(len(compressed).to_bytes(4, 'big'))
         # Write the Huffman tree and compressed text as byte strings
         f.write(traversal)
@@ -150,8 +150,8 @@ def _write_compressed(filename: Pathlike, traversal: bytes, compressed: bytes):
 # Read the compressed text and Huffman tree from a binary file.
 def _read_compressed(filename: Pathlike):
     with open(filename, 'rb') as f:
-        # Read the length of the Huffman tree and compressed text as 4-byte big-endian integers
-        traversal_length = int.from_bytes(f.read(4), 'big')
+        # Read the length of the Huffman tree and compressed text as big-endian integers
+        traversal_length = int.from_bytes(f.read(2), 'big')
         compressed_length = int.from_bytes(f.read(4), 'big')
         # Read the Huffman tree and compressed text as byte strings
         traversal = f.read(traversal_length)
